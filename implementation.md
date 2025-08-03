@@ -42,18 +42,22 @@ This allows you to switch between LLM providers without changing any code.
 ### Feature 1: Project Scaffolding
 #### PR #1: `feat: Initial project setup and agent interface`
 *   **Description:** Establishes the foundational directory structure, dependencies (`langchain`, `langchain-google-genai`, `langchain-openai`, `requests`, `beautifulsoup4`, `python-dotenv`), and a `BaseAgent` abstract class.
+*   **Status:** Completed.
 
 ### Feature 2: Core Research & Narrative Generation
 #### PR #2: `feat: Implement Research Agent`
 *   **Description:** Implements the "Librarian" agent to fetch and scrape raw data, producing `artifacts/sources.json`.
+*   **Status:** Completed.
 
 #### PR #3: `feat: Implement Analysis Agent`
 *   **Description:** Implements the "Storyteller" agent to synthesize a narrative, producing `artifacts/narrative.md`.
 *   **Details:** The agent will dynamically select its LLM (Gemini or OpenAI) based on the `LLM_PROVIDER` environment variable.
+*   **Status:** Completed.
 
 ### Feature 3: Orchestration & Content Generation
 #### PR #4: `feat: Implement Orchestrator Agent`
 *   **Description:** Implements the "Director" agent to manage the workflow, chaining the Research and Analysis agents.
+*   **Status:** Completed.
 
 #### PR #5: `feat: Implement Scriptwriting Agent`
 *   **Description:** Adds the "Video Writer" agent to the pipeline, producing `artifacts/script.md`.
