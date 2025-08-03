@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+virtualenv/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+thumbs.db
+
+# Project specific
+artifacts/
+main.py
