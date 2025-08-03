@@ -55,5 +55,16 @@
 - The temporary `main.py` script successfully orchestrates these two agents.
 
 ### 7. Next Steps
-- Remove the temporary `main.py` script.
 - Implement the `Orchestrator Agent` as per the `implementation.md` plan.
+
+## Feature 3: Orchestration & Content Generation
+
+### PR #4: `feat: Implement Orchestrator Agent`
+- **Context:** With the `ResearchAgent` and `AnalysisAgent` successfully implemented and tested, the next logical step was to create the `OrchestratorAgent`. This agent serves as the central director, managing the workflow by calling other agents in the correct sequence and handling data flow between them.
+- **Action:** Implemented the `OrchestratorAgent` in `src/agents.py`. This agent initializes `ResearchAgent` and `AnalysisAgent` instances and orchestrates their execution: first, it calls the `ResearchAgent` to gather content, and then it passes the research output to the `AnalysisAgent` to generate a narrative.
+- **Outcome:** The `OrchestratorAgent` successfully orchestrated the research and analysis process, generating a coherent narrative and saving it to `artifacts/narrative.md`. The previous `RateLimitError` was resolved by limiting the number of chunks processed during summarization.
+
+### 8. Next Steps
+- Implement the `Scriptwriting Agent` (PR #5).
+- Implement the `ArticleWriter Agent` (PR #6).
+- Implement the `Visual Asset Agent` (PR #7).

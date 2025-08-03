@@ -139,3 +139,20 @@ Summary:"""
                 summaries.append("Error summarizing chunk.") # Add a placeholder for failed summaries
         
         return "\n\n".join(summaries)
+
+class OrchestratorAgent(BaseAgent):
+    def __init__(self):
+        self.research_agent = ResearchAgent()
+        self.analysis_agent = AnalysisAgent()
+
+    def execute(self, topic: str):
+        print(f"Orchestrating content creation for topic: {topic}")
+        
+        # Step 1: Research
+        research_content = self.research_agent.execute(topic)
+        
+        # Step 2: Analysis
+        narrative = self.analysis_agent.execute(research_content)
+        
+        print("Orchestration complete.")
+        return narrative
