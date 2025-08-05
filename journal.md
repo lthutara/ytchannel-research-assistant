@@ -64,7 +64,7 @@
 - **Action:** Implemented the `OrchestratorAgent` in `src/agents.py`. This agent initializes `ResearchAgent` and `AnalysisAgent` instances and orchestrates their execution: first, it calls the `ResearchAgent` to gather content, and then it passes the research output to the `AnalysisAgent` to generate a narrative.
 - **Outcome:** The `OrchestratorAgent` successfully orchestrated the research and analysis process, generating a coherent narrative and saving it to `artifacts/narrative.md`. The previous `RateLimitError` was resolved by limiting the number of chunks processed during summarization.
 
-### 8. Adopting a New Development Strategy
+### 8. Adopting a New Development Strategy (August 5, 2025)
 
 - **Problem:** The initial development workflow lacked automated testing and was inefficient, re-running the entire pipeline for every change, which wasted time and API tokens.
 - **New Strategy: "Develop, Test, Move"**
@@ -73,6 +73,7 @@
     3.  **Integrate:** Only integrate a new agent into the main `OrchestratorAgent` after it has been successfully tested in isolation.
 - **Action:** Created `tests/test_pipeline_stage1.py` to verify the existing Research and Analysis pipeline. Addressed a `LangChainDeprecationWarning` by updating to `langchain-tavily`.
 - **Refined Testing Strategy:** To allow for better tuning and debugging, created separate unit tests for the `ResearchAgent` (`tests/test_research_agent.py`) and the `AnalysisAgent` (`tests/test_analysis_agent.py`). This was enabled by modifying the `ResearchAgent` to save its output chunks to `artifacts/research_chunks.json`, providing a stable input for the `AnalysisAgent` test.
+- **Full Pipeline Simulation & Token Counting:** Implemented a `simulate_llm_calls` flag in the `OrchestratorAgent` to allow the full pipeline to run without making actual LLM API calls. This involves reading from `simulated_artifacts/` and writing to `artifacts/`. Also, modified agents to return token usage information, which is aggregated and reported by the `OrchestratorAgent`.
 
 ### 9. Next Steps
 - Implement the `Scriptwriting Agent` (PR #5) using the new development strategy.

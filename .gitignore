@@ -2,3 +2,4 @@
 .env
 artifacts/
 src/__pycache__/
+simulated_artifacts/

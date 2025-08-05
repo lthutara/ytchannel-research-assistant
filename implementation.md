@@ -73,10 +73,12 @@ To ensure the reliability and stability of the Content Weaver framework, we will
 #### PR #5: `feat: Implement Scriptwriting Agent`
 *   **Description:** Adds the "Video Writer" agent to the pipeline, producing `artifacts/script.md`.
 *   **Details:** The agent will dynamically select its LLM.
+*   **Status:** Completed.
 
 #### PR #6: `feat: Implement ArticleWriter Agent`
 *   **Description:** Adds the "Blog Writer" agent to the pipeline, producing `artifacts/article.md`.
 *   **Details:** The agent will dynamically select its LLM.
+*   **Status:** Completed.
 
 ### Feature 4: Final Polish & Completion
 #### PR #7: `feat: Implement Visual Asset Agent`
