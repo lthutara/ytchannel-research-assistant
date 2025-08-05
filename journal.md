@@ -74,6 +74,7 @@
 - **Action:** Created `tests/test_pipeline_stage1.py` to verify the existing Research and Analysis pipeline. Addressed a `LangChainDeprecationWarning` by updating to `langchain-tavily`.
 - **Refined Testing Strategy:** To allow for better tuning and debugging, created separate unit tests for the `ResearchAgent` (`tests/test_research_agent.py`) and the `AnalysisAgent` (`tests/test_analysis_agent.py`). This was enabled by modifying the `ResearchAgent` to save its output chunks to `artifacts/research_chunks.json`, providing a stable input for the `AnalysisAgent` test.
 - **Full Pipeline Simulation & Token Counting:** Implemented a `simulate_llm_calls` flag in the `OrchestratorAgent` to allow the full pipeline to run without making actual LLM API calls. This involves reading from `simulated_artifacts/` and writing to `artifacts/`. Also, modified agents to return token usage information, which is aggregated and reported by the `OrchestratorAgent`.
+- **Implemented VisualAssetAgent:** Added the `VisualAssetAgent` to `src/agents.py` and integrated it into the `OrchestratorAgent` to complete the content generation pipeline. Created `tests/test_visual_asset_agent.py` for isolated testing with a mocked LLM.
 
 ### 9. Next Steps
 - Implement the `Scriptwriting Agent` (PR #5) using the new development strategy.

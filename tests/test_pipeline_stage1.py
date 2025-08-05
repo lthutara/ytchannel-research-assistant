@@ -21,6 +21,7 @@ def test_stage1_orchestration():
     narrative_path = os.path.join(output_dir, "narrative.md")
     script_path = os.path.join(output_dir, "script.md")
     article_path = os.path.join(output_dir, "article.md")
+    shotlist_path = os.path.join(output_dir, "shotlist.json")
 
     # Clean up previous run artifacts if they exist
     if os.path.exists(sources_path):
@@ -31,6 +32,8 @@ def test_stage1_orchestration():
         os.remove(script_path)
     if os.path.exists(article_path):
         os.remove(article_path)
+    if os.path.exists(shotlist_path):
+        os.remove(shotlist_path)
 
     # 2. Execution
     orchestrator = OrchestratorAgent()
@@ -41,6 +44,7 @@ def test_stage1_orchestration():
     assert os.path.exists(narrative_path), "Analysis artifact (narrative.md) was not created."
     assert os.path.exists(script_path), "Scriptwriting artifact (script.md) was not created."
     assert os.path.exists(article_path), "ArticleWriter artifact (article.md) was not created."
+    assert os.path.exists(shotlist_path), "VisualAsset artifact (shotlist.json) was not created."
 
     # Verify content of simulated files
     with open(narrative_path, 'r') as f:
@@ -49,18 +53,22 @@ def test_stage1_orchestration():
         assert "Simulated Video Script" in f.read()
     with open(article_path, 'r') as f:
         assert "Simulated Web Article" in f.read()
+    with open(shotlist_path, 'r') as f:
+        assert "Simulated Visual Assets" in f.read() # Assuming this content in simulated_artifacts/shotlist.json
 
     # Verify token usage is present (even if simulated to 0)
     assert "token_usage" in result
     assert "analysis" in result["token_usage"]
     assert "scriptwriting" in result["token_usage"]
     assert "article_writing" in result["token_usage"]
+    assert "visual_assets" in result["token_usage"]
 
     print("\n✅ Stage 1 orchestration test passed successfully with simulated LLM calls!")
     print(f"   - Verified {sources_path}")
     print(f"   - Verified {narrative_path}")
     print(f"   - Verified {script_path}")
     print(f"   - Verified {article_path}")
+    print(f"   - Verified {shotlist_path}")
     print(f"   - Verified token usage: {result["token_usage"]}")
 
 

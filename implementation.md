@@ -84,3 +84,4 @@ To ensure the reliability and stability of the Content Weaver framework, we will
 #### PR #7: `feat: Implement Visual Asset Agent`
 *   **Description:** Completes the pipeline by adding the "Art Director" agent, producing `artifacts/shotlist.json`.
 *   **Details:** The agent will dynamically select its LLM.
+*   **Status:** Completed.

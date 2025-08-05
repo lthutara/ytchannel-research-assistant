@@ -227,12 +227,58 @@ class ArticleWriterAgent(BaseAgent):
         print(f"Web article generated and saved to {output_path}")
         return {"content": web_article_content, "token_usage": token_usage}
 
+class VisualAssetAgent(BaseAgent):
+    def __init__(self):
+        self.llm = self._get_llm()
+
+    def _get_llm(self):
+        llm_provider = os.getenv("LLM_PROVIDER")
+        if llm_provider == "GOOGLE":
+            return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
+        elif llm_provider == "OPENAI":
+            return ChatOpenAI(model="gpt-4", temperature=0.7)
+        else:
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+
+    def execute(self, video_script: str):
+        print("Suggesting visual assets...")
+        template = """You are an expert art director. Your task is to read the provided video script and suggest appropriate visual assets (e.g., diagrams, photos, stock footage) for each section.
+
+        Video Script:
+        {video_script}
+
+        Please provide the visual asset suggestions in JSON format, where each key is a section of the script and the value is a list of suggested visuals.
+        """
+        
+        prompt = ChatPromptTemplate.from_template(template)
+        chain = prompt | self.llm
+
+        visual_assets_response = chain.invoke({"video_script": video_script})
+        visual_assets_content = visual_assets_response.content
+        token_usage = visual_assets_response.response_metadata.get("token_usage", {})
+
+        output_dir = "artifacts"
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, "shotlist.json")
+        
+        with open(output_path, "w") as f:
+            # Attempt to parse as JSON and re-dump for pretty printing
+            try:
+                json_content = json.loads(visual_assets_content)
+                json.dump(json_content, f, indent=4)
+            except json.JSONDecodeError:
+                f.write(visual_assets_content) # Write as plain text if not valid JSON
+        
+        print(f"Visual asset suggestions generated and saved to {output_path}")
+        return {"content": visual_assets_content, "token_usage": token_usage}
+
 class OrchestratorAgent(BaseAgent):
     def __init__(self):
         self.research_agent = ResearchAgent()
         self.analysis_agent = AnalysisAgent()
         self.scriptwriting_agent = ScriptwritingAgent()
         self.article_writer_agent = ArticleWriterAgent()
+        self.visual_asset_agent = VisualAssetAgent()
 
     def execute(self, topic: str, simulate_llm_calls: bool = False):
         print(f"Orchestrating content creation for topic: {topic}")
@@ -288,12 +334,30 @@ class OrchestratorAgent(BaseAgent):
             article_result = self.article_writer_agent.execute(narrative_content)
             web_article_content = article_result["content"]
             web_article_token_usage = article_result["token_usage"]
+
+        # Step 4: Visual Asset Suggestion
+        if simulate_llm_calls:
+            print("Simulating VisualAssetAgent output...")
+            with open("simulated_artifacts/shotlist.json", "r") as f:
+                visual_assets_content = f.read()
+            visual_assets_token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0} # Simulated token usage
+            # Write simulated shotlist to artifacts directory for test verification
+            output_dir = "artifacts"
+            os.makedirs(output_dir, exist_ok=True)
+            shotlist_output_path = os.path.join(output_dir, "shotlist.json")
+            with open(shotlist_output_path, "w") as f:
+                f.write(visual_assets_content)
+        else:
+            visual_assets_result = self.visual_asset_agent.execute(video_script_content)
+            visual_assets_content = visual_assets_result["content"]
+            visual_assets_token_usage = visual_assets_result["token_usage"]
         
         total_token_usage = {
             "analysis": narrative_token_usage,
             "scriptwriting": video_script_token_usage,
-            "article_writing": web_article_token_usage
+            "article_writing": web_article_token_usage,
+            "visual_assets": visual_assets_token_usage
         }
 
         print("Orchestration complete.")
-        return {"video_script": video_script_content, "web_article": web_article_content, "token_usage": total_token_usage}
+        return {"video_script": video_script_content, "web_article": web_article_content, "visual_assets": visual_assets_content, "token_usage": total_token_usage}
