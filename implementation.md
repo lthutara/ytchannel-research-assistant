@@ -85,3 +85,15 @@ To ensure the reliability and stability of the Content Weaver framework, we will
 *   **Description:** Completes the pipeline by adding the "Art Director" agent, producing `artifacts/shotlist.json`.
 *   **Details:** The agent will dynamically select its LLM.
 *   **Status:** Completed.
+
+---
+
+## 4. Future Enhancements
+
+These are potential features and improvements that can be added to the Content Weaver framework in future development cycles.
+
+### Feature 5: Selective Content Generation
+*   **Description:** Allow the user to specify which content types (e.g., video script, web article, visual assets) should be generated. This will involve modifying the `OrchestratorAgent` to accept parameters for selective execution, enabling more flexible and efficient content creation based on specific user needs.
+
+### Feature 6: Multilingual Output (Telugu)
+*   **Description:** Implement the capability to generate final content (video script, web article) in Telugu. This will require careful prompt engineering for the LLMs to ensure accurate and idiomatic translation, and may involve integrating language translation tools if direct LLM generation proves insufficient or too costly.
