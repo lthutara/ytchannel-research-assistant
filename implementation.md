@@ -37,6 +37,17 @@ This allows you to switch between LLM providers without changing any code.
 
 ---
 
+## 3. Testing Strategy
+
+To ensure the reliability and stability of the Content Weaver framework, we will follow a "Develop, Test, Move" strategy. Each new feature will be developed in isolation and accompanied by tests before being integrated into the main pipeline.
+
+-   **Unit and Integration Tests:** Tests for each agent and for the integrated pipeline will be located in the `tests/` directory.
+-   **Running Tests:** Tests can be executed using `pytest` from the root of the project.
+
+---
+
+---
+
 ## 2. Implementation Steps (PRs)
 
 ### Feature 1: Project Scaffolding

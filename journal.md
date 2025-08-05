@@ -47,7 +47,7 @@
 
 #### Issue 7: `openai.RateLimitError: Request too large for gpt-4` (Persistent)
 - **Context:** Even after summarizing individual chunks, the combined summaries were still too large for the GPT-4 model's token limit.
-- **Solution:** Implemented a limit on the number of chunks processed for summarization (`max_chunks_to_process = 50`) within the `_summarize_chunks` method of `AnalysisAgent`. This significantly reduced the input token count, resolving the `RateLimitError`.
+- **Solution:** Implemented a limit on the number of chunks to process for summarization (`max_chunks_to_process = 50`) within the `_summarize_chunks` method of `AnalysisAgent`. This significantly reduced the input token count, resolving the `RateLimitError`.
 
 ### 6. Current Status
 - The `ResearchAgent` successfully fetches and chunks web content.
@@ -64,7 +64,16 @@
 - **Action:** Implemented the `OrchestratorAgent` in `src/agents.py`. This agent initializes `ResearchAgent` and `AnalysisAgent` instances and orchestrates their execution: first, it calls the `ResearchAgent` to gather content, and then it passes the research output to the `AnalysisAgent` to generate a narrative.
 - **Outcome:** The `OrchestratorAgent` successfully orchestrated the research and analysis process, generating a coherent narrative and saving it to `artifacts/narrative.md`. The previous `RateLimitError` was resolved by limiting the number of chunks processed during summarization.
 
-### 8. Next Steps
-- Implement the `Scriptwriting Agent` (PR #5).
+### 8. Adopting a New Development Strategy
+
+- **Problem:** The initial development workflow lacked automated testing and was inefficient, re-running the entire pipeline for every change, which wasted time and API tokens.
+- **New Strategy: "Develop, Test, Move"**
+    1.  **Develop in Isolation:** Build new agents using dedicated, temporary scripts that load artifacts from the previous stage (e.g., loading `narrative.md` to test the `ScriptwritingAgent`).
+    2.  **Test and Verify:** Create tests in the `tests/` directory to verify the functionality of each agent and the pipeline at each stage.
+    3.  **Integrate:** Only integrate a new agent into the main `OrchestratorAgent` after it has been successfully tested in isolation.
+- **Action:** Created `tests/test_pipeline_stage1.py` to verify the existing Research and Analysis pipeline. Addressed a `LangChainDeprecationWarning` by updating to `langchain-tavily`.
+
+### 9. Next Steps
+- Implement the `Scriptwriting Agent` (PR #5) using the new development strategy.
 - Implement the `ArticleWriter Agent` (PR #6).
 - Implement the `Visual Asset Agent` (PR #7).

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_tavily import TavilySearch
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from bs4 import BeautifulSoup
@@ -21,7 +21,7 @@ class BaseAgent(ABC):
 class ResearchAgent(BaseAgent):
     def __init__(self):
         self.llm = self._get_llm()
-        self.web_search_tool = TavilySearchResults(max_results=5)
+        self.web_search_tool = TavilySearch(max_results=5)
 
     def _get_llm(self):
         llm_provider = os.getenv("LLM_PROVIDER")
@@ -53,7 +53,7 @@ class ResearchAgent(BaseAgent):
         print(f"Researching topic: {topic}")
         search_results = self.web_search_tool.invoke({"query": topic})
         
-        urls = [result["url"] for result in search_results]
+        urls = [result["url"] for result in search_results["results"]]
         print(f"Found URLs: {urls}")
 
         scraped_content_chunks = self._scrape_and_chunk(urls)
@@ -139,6 +139,45 @@ Summary:"""
                 summaries.append("Error summarizing chunk.") # Add a placeholder for failed summaries
         
         return "\n\n".join(summaries)
+
+class ScriptwritingAgent(BaseAgent):
+    def __init__(self):
+        self.llm = self._get_llm()
+
+    def _get_llm(self):
+        llm_provider = os.getenv("LLM_PROVIDER")
+        if llm_provider == "GOOGLE":
+            return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
+        elif llm_provider == "OPENAI":
+            return ChatOpenAI(model="gpt-4", temperature=0.7)
+        else:
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+
+    def execute(self, narrative: str):
+        print("Generating video script...")
+        template = """You are an expert video scriptwriter. Your task is to transform the provided narrative into a conversational and engaging video script.
+        The script should be suitable for a 'tech voice' YouTube channel.
+
+        Narrative:
+        {narrative}
+
+        Please provide the video script in Markdown format, including sections for introduction, main points, and conclusion.
+        """
+        
+        prompt = ChatPromptTemplate.from_template(template)
+        chain = prompt | self.llm
+
+        video_script = chain.invoke({"narrative": narrative})
+
+        output_dir = "artifacts"
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, "script.md")
+        
+        with open(output_path, "w") as f:
+            f.write(video_script.content)
+        
+        print(f"Video script generated and saved to {output_path}")
+        return video_script.content
 
 class OrchestratorAgent(BaseAgent):
     def __init__(self):
