@@ -108,3 +108,6 @@ These are potential features and improvements that can be added to the Content W
 *   **Description:** Enhance the summarization and chunking strategies within the Analysis Agent to improve narrative coherence and LLM efficiency. This includes:
     *   **Dynamic/Semantic Chunking:** Explore and implement advanced chunking techniques that consider the semantic meaning of the text, rather than just fixed character counts. This can lead to more contextually relevant and coherent summaries.
     *   **Iterative Summarization:** For very large research content, implement a multi-pass summarization approach where initial summaries are further summarized. This progressively reduces the content while retaining key information, optimizing token usage for the final narrative generation.
+
+### Feature 9: Social Media & Technical Source Integration
+*   **Description:** Implement capabilities within the `ResearchAgent` to pull topics and relevant links from social media platforms (e.g., YouTube, X/Twitter) and specialized technical sources (e.g., GitHub, Stack Overflow, specific tech blogs). This could involve using platform-specific APIs or targeted scraping, focusing on trending topics, popular content, or expert discussions to enrich the initial research phase.

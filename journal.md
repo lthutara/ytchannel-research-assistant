@@ -81,6 +81,10 @@
 - Implement the `ArticleWriter Agent` (PR #6).
 - Implement the `Visual Asset Agent` (PR #7).
 
+### 11. Social Media & Technical Source Integration (August 5, 2025)
+- **Problem:** Current `ResearchAgent` primarily relies on general web search, missing out on valuable insights from social media and specialized technical platforms.
+- **Proposed Solution:** Implement capabilities within the `ResearchAgent` to pull topics and relevant links from social media platforms (e.g., YouTube, X/Twitter) and specialized technical sources (e.g., GitHub, Stack Overflow, specific tech blogs). This could involve using platform-specific APIs or targeted scraping, focusing on trending topics, popular content, or expert discussions to enrich the initial research phase.
+
 ### 10. Discussion on Research and Analysis Optimization (August 5, 2025)
 - **Problem:** Current `ResearchAgent` gathers broad data, leading to large volumes of text and potential inefficiencies in LLM calls for summarization.
 - **Proposed Solutions for `ResearchAgent`:**
