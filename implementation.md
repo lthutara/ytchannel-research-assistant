@@ -97,3 +97,14 @@ These are potential features and improvements that can be added to the Content W
 
 ### Feature 6: Multilingual Output (Telugu)
 *   **Description:** Implement the capability to generate final content (video script, web article) in Telugu. This will require careful prompt engineering for the LLMs to ensure accurate and idiomatic translation, and may involve integrating language translation tools if direct LLM generation proves insufficient or too costly.
+
+### Feature 7: Research Agent Optimization
+*   **Description:** Improve the efficiency and quality of the Research Agent's output. This includes:
+    *   **Smarter Search Query Generation:** Utilize LLMs to generate more precise and diverse search queries based on the initial topic, leading to more relevant initial search results.
+    *   **Intelligent Content Filtering:** Implement mechanisms to filter and score scraped content for relevance, discarding irrelevant sections (e.g., boilerplate text, advertisements, comments) before summarization to reduce noise and LLM input tokens.
+    *   **URL Caching and Curated Sources:** Develop a system to cache previously used high-quality URLs and allow for the inclusion of pre-defined, trusted sources for specific topics. This can reduce redundant web searches and ensure consistent, reliable source material, thereby optimizing LLM calls.
+
+### Feature 8: Analysis Agent Optimization
+*   **Description:** Enhance the summarization and chunking strategies within the Analysis Agent to improve narrative coherence and LLM efficiency. This includes:
+    *   **Dynamic/Semantic Chunking:** Explore and implement advanced chunking techniques that consider the semantic meaning of the text, rather than just fixed character counts. This can lead to more contextually relevant and coherent summaries.
+    *   **Iterative Summarization:** For very large research content, implement a multi-pass summarization approach where initial summaries are further summarized. This progressively reduces the content while retaining key information, optimizing token usage for the final narrative generation.
