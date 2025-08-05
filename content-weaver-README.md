@@ -16,7 +16,7 @@ The detailed planning for this framework has already been completed. The core do
 
 *   **Implementation Plan (`docs/implementation.md`):** This document provides a concrete, step-by-step action plan for building the framework, broken down into a series of Pull Requests (PRs). It is the "how" of the project.
 
-## 3. Getting Started
+## 3. Getting Started & Development Workflow
 
 To begin development or to get the project running, follow these steps:
 
@@ -29,5 +29,10 @@ To begin development or to get the project running, follow these steps:
 3.  **Install Dependencies:**
     *   Install all required Python packages using the `requirements.txt` or `pyproject.toml` file.
 
-4.  **Follow the Implementation Plan:**
-    *   Begin development by following the PR-style steps outlined in `implementation.md`, starting with the project scaffolding.
+4.  **Development Workflow: "Develop, Test, Move"**
+    We follow an iterative development approach to ensure reliability, efficiency, and cost-effectiveness. Each agent and feature is developed and tested in isolation before being integrated into the main pipeline. This minimizes API calls during development and allows for focused debugging.
+    *   **Isolated Development:** New agents are built and tested using dedicated test scripts that leverage cached or mocked data from previous stages.
+    *   **Comprehensive Testing:** Both unit tests (for individual agents) and integration tests (for the full pipeline) are maintained in the `tests/` directory.
+    *   **Simulated Runs:** The `OrchestratorAgent` supports a `simulate_llm_calls` flag, enabling full end-to-end pipeline runs without incurring LLM API costs, crucial for rapid iteration and testing.
+
+    For detailed steps, current development status, and future enhancements, please refer to `implementation.md` and `journal.md`.
