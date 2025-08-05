@@ -67,12 +67,16 @@ class ResearchAgent(BaseAgent):
 
         output_dir = "artifacts"
         os.makedirs(output_dir, exist_ok=True)
-        output_path = os.path.join(output_dir, "sources.json")
-        
-        with open(output_path, "w") as f:
+        sources_output_path = os.path.join(output_dir, "sources.json")
+        chunks_output_path = os.path.join(output_dir, "research_chunks.json")
+
+        with open(sources_output_path, "w") as f:
             json.dump(sources_data, f, indent=4)
-        
-        print(f"Research complete. Sources saved to {output_path}")
+
+        with open(chunks_output_path, "w") as f:
+            json.dump(scraped_content_chunks, f, indent=4)
+
+        print(f"Research complete. Sources saved to {sources_output_path}")
         return scraped_content_chunks
 
 class AnalysisAgent(BaseAgent):

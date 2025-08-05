@@ -1,6 +1,6 @@
 # Project Journal: Content Weaver
 
-## Initial Setup and Agent Implementation
+## Initial Setup and Agent Implementation (August 5, 2025)
 
 ### 1. Project Scaffolding
 - Created the basic directory structure (`artifacts/` and `src/`).
@@ -57,7 +57,7 @@
 ### 7. Next Steps
 - Implement the `Orchestrator Agent` as per the `implementation.md` plan.
 
-## Feature 3: Orchestration & Content Generation
+## Feature 3: Orchestration & Content Generation (August 5, 2025)
 
 ### PR #4: `feat: Implement Orchestrator Agent`
 - **Context:** With the `ResearchAgent` and `AnalysisAgent` successfully implemented and tested, the next logical step was to create the `OrchestratorAgent`. This agent serves as the central director, managing the workflow by calling other agents in the correct sequence and handling data flow between them.
@@ -72,6 +72,7 @@
     2.  **Test and Verify:** Create tests in the `tests/` directory to verify the functionality of each agent and the pipeline at each stage.
     3.  **Integrate:** Only integrate a new agent into the main `OrchestratorAgent` after it has been successfully tested in isolation.
 - **Action:** Created `tests/test_pipeline_stage1.py` to verify the existing Research and Analysis pipeline. Addressed a `LangChainDeprecationWarning` by updating to `langchain-tavily`.
+- **Refined Testing Strategy:** To allow for better tuning and debugging, created separate unit tests for the `ResearchAgent` (`tests/test_research_agent.py`) and the `AnalysisAgent` (`tests/test_analysis_agent.py`). This was enabled by modifying the `ResearchAgent` to save its output chunks to `artifacts/research_chunks.json`, providing a stable input for the `AnalysisAgent` test.
 
 ### 9. Next Steps
 - Implement the `Scriptwriting Agent` (PR #5) using the new development strategy.
