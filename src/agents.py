@@ -29,8 +29,15 @@ class ResearchAgent(BaseAgent):
             return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
         elif llm_provider == "OPENAI":
             return ChatOpenAI(model="gpt-4", temperature=0.7)
+        elif llm_provider == "SARVAM":
+            return ChatOpenAI(
+                openai_api_base="https://api.sarvam.ai/v1/",
+                openai_api_key=os.getenv("api_subscription_key"), # Sarvam uses OpenAI-compatible API key
+                model="sarvam-m", # You might need to specify the exact model name here
+                temperature=0.7
+            )
         else:
-            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
     def _scrape_and_chunk(self, urls):
         all_content = []
@@ -89,8 +96,15 @@ class AnalysisAgent(BaseAgent):
             return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
         elif llm_provider == "OPENAI":
             return ChatOpenAI(model="gpt-4", temperature=0.7)
+        elif llm_provider == "SARVAM":
+            return ChatOpenAI(
+                openai_api_base="https://api.sarvam.ai/v1/",
+                openai_api_key=os.getenv("api_subscription_key"), # Sarvam uses OpenAI-compatible API key
+                model="sarvam-m", # You might need to specify the exact model name here
+                temperature=0.7
+            )
         else:
-            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
     def execute(self, research_content_chunks: list):
         print("Analyzing research content...")
@@ -134,7 +148,8 @@ Summary:"""
         summary_chain = summary_prompt | self.llm
 
         # Limit the number of chunks to process to avoid rate limits
-        max_chunks_to_process = 50  # Adjust this value as needed
+        max_chunks_to_process = 5  # Reduced for testing rate limits
+        import time # Import time for sleep
         for i, chunk in enumerate(chunks[:max_chunks_to_process]):
             try:
                 summary = summary_chain.invoke({"text": chunk})
@@ -156,8 +171,15 @@ class ScriptwritingAgent(BaseAgent):
             return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
         elif llm_provider == "OPENAI":
             return ChatOpenAI(model="gpt-4", temperature=0.7)
+        elif llm_provider == "SARVAM":
+            return ChatOpenAI(
+                openai_api_base="https://api.sarvam.ai/v1/",
+                openai_api_key=os.getenv("api_subscription_key"), # Sarvam uses OpenAI-compatible API key
+                model="sarvam-m", # You might need to specify the exact model name here
+                temperature=0.7
+            )
         else:
-            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
     def execute(self, narrative: str):
         print("Generating video script...")
@@ -197,8 +219,15 @@ class ArticleWriterAgent(BaseAgent):
             return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
         elif llm_provider == "OPENAI":
             return ChatOpenAI(model="gpt-4", temperature=0.7)
+        elif llm_provider == "SARVAM":
+            return ChatOpenAI(
+                openai_api_base="https://api.sarvam.ai/v1/",
+                openai_api_key=os.getenv("api_subscription_key"), # Sarvam uses OpenAI-compatible API key
+                model="sarvam-m", # You might need to specify the exact model name here
+                temperature=0.7
+            )
         else:
-            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
     def execute(self, narrative: str):
         print("Generating web article...")
@@ -237,8 +266,15 @@ class VisualAssetAgent(BaseAgent):
             return ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.7)
         elif llm_provider == "OPENAI":
             return ChatOpenAI(model="gpt-4", temperature=0.7)
+        elif llm_provider == "SARVAM":
+            return ChatOpenAI(
+                openai_api_base="https://api.sarvam.ai/v1/",
+                openai_api_key=os.getenv("api_subscription_key"), # Sarvam uses OpenAI-compatible API key
+                model="sarvam-m", # You might need to specify the exact model name here
+                temperature=0.7
+            )
         else:
-            raise ValueError("LLM_PROVIDER must be 'GOOGLE' or 'OPENAI'")
+            raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
     def execute(self, video_script: str):
         print("Suggesting visual assets...")

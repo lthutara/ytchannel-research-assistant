@@ -7,3 +7,5 @@ python-dotenv
 tavily-python
 pytest
 langchain-tavily
+langchain-community
+sarvamai
