@@ -1,0 +1,44 @@
+{
+  "topics": [
+    {
+      "id": "ai-future-2024",
+      "title": "The Future of AI",
+      "description": "Exploring AI trends, innovations, and global collaboration from 2024-2034",
+      "status": "completed",
+      "created_at": "2025-08-09",
+      "completed_at": "2025-08-09"
+    },
+    {
+      "id": "quantum-computing-breakthrough",
+      "title": "Quantum Computing Breakthrough",
+      "description": "Latest developments in quantum computing and its impact on cryptography and AI",
+      "status": "in_progress",
+      "created_at": "2025-08-09",
+      "completed_at": null
+    },
+    {
+      "id": "climate-tech-solutions",
+      "title": "Climate Tech Solutions",
+      "description": "Innovative technologies addressing climate change and sustainability",
+      "status": "completed",
+      "created_at": "2025-08-09",
+      "completed_at": "2025-08-09"
+    },
+    {
+      "id": "web3-decentralized-future",
+      "title": "Web3 and Decentralized Future",
+      "description": "How blockchain and decentralized technologies are reshaping the internet",
+      "status": "in_progress",
+      "created_at": "2025-08-09",
+      "completed_at": null
+    },
+    {
+      "id": "space-economy-2030",
+      "title": "Space Economy by 2030",
+      "description": "Commercial space ventures, asteroid mining, and orbital infrastructure",
+      "status": "completed",
+      "created_at": "2025-08-09",
+      "completed_at": "2025-08-09"
+    }
+  ]
+}

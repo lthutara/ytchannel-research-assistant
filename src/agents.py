@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import os
 import json
+import re
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
@@ -56,13 +57,18 @@ class ResearchAgent(BaseAgent):
         chunks = text_splitter.split_text(" ".join(all_content))
         return chunks
 
+    def _generate_topic_id(self, topic: str) -> str:
+        """Generate consistent topic_id from topic string."""
+        topic_id = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
+        topic_id = re.sub(r'[\s-]+', '-', topic_id).strip('-')
+        return topic_id
+
     def execute(self, topic: str):
         print(f"Researching topic: {topic}")
-        search_results = self.web_search_tool.invoke({"query": topic})
-        
-        urls = [result["url"] for result in search_results["results"]]
+        search_results = self.web_search_tool.invoke(topic)
+        urls = [result['url'] for result in search_results['results']]
         print(f"Found URLs: {urls}")
-
+        
         scraped_content_chunks = self._scrape_and_chunk(urls)
         
         sources_data = []
@@ -72,7 +78,9 @@ class ResearchAgent(BaseAgent):
                 "content_preview": scraped_content_chunks[i][:500] if scraped_content_chunks else "No content scraped"
             })
 
-        output_dir = "artifacts"
+        # Use topic-specific directory with consistent topic_id generation
+        topic_id = self._generate_topic_id(topic)
+        output_dir = f"artifacts/{topic_id}"
         os.makedirs(output_dir, exist_ok=True)
         sources_output_path = os.path.join(output_dir, "sources.json")
         chunks_output_path = os.path.join(output_dir, "research_chunks.json")
@@ -106,7 +114,13 @@ class AnalysisAgent(BaseAgent):
         else:
             raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
-    def execute(self, research_content_chunks: list):
+    def _generate_topic_id(self, topic: str) -> str:
+        """Generate consistent topic_id from topic string."""
+        topic_id = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
+        topic_id = re.sub(r'[\s-]+', '-', topic_id).strip('-')
+        return topic_id
+
+    def execute(self, research_content_chunks: list, topic: str):
         print("Analyzing research content...")
         template = """You are an expert content analyst. Your task is to synthesize the provided research content into a coherent and engaging narrative. 
         Focus on the core themes, key data points, and a logical flow that would be suitable for a video script and a web article.
@@ -126,7 +140,9 @@ class AnalysisAgent(BaseAgent):
         narrative_content = narrative_response.content
         token_usage = narrative_response.response_metadata.get("token_usage", {})
 
-        output_dir = "artifacts"
+        # Use topic-specific directory with consistent topic_id generation
+        topic_id = self._generate_topic_id(topic)
+        output_dir = f"artifacts/{topic_id}"
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, "narrative.md")
         
@@ -181,7 +197,13 @@ class ScriptwritingAgent(BaseAgent):
         else:
             raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
-    def execute(self, narrative: str):
+    def _generate_topic_id(self, topic: str) -> str:
+        """Generate consistent topic_id from topic string."""
+        topic_id = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
+        topic_id = re.sub(r'[\s-]+', '-', topic_id).strip('-')
+        return topic_id
+
+    def execute(self, narrative: str, topic: str):
         print("Generating video script...")
         template = """You are an expert video scriptwriter. Your task is to transform the provided narrative into a conversational and engaging video script.
         The script should be suitable for a 'tech voice' YouTube channel.
@@ -199,7 +221,9 @@ class ScriptwritingAgent(BaseAgent):
         video_script_content = video_script_response.content
         token_usage = video_script_response.response_metadata.get("token_usage", {})
 
-        output_dir = "artifacts"
+        # Use topic-specific directory with consistent topic_id generation
+        topic_id = self._generate_topic_id(topic)
+        output_dir = f"artifacts/{topic_id}"
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, "script.md")
         
@@ -229,7 +253,13 @@ class ArticleWriterAgent(BaseAgent):
         else:
             raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
-    def execute(self, narrative: str):
+    def _generate_topic_id(self, topic: str) -> str:
+        """Generate consistent topic_id from topic string."""
+        topic_id = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
+        topic_id = re.sub(r'[\s-]+', '-', topic_id).strip('-')
+        return topic_id
+
+    def execute(self, narrative: str, topic: str):
         print("Generating web article...")
         template = """You are an expert article writer. Your task is to transform the provided narrative into a well-structured, long-form article suitable for a website or blog.
 
@@ -246,7 +276,9 @@ class ArticleWriterAgent(BaseAgent):
         web_article_content = web_article_response.content
         token_usage = web_article_response.response_metadata.get("token_usage", {})
 
-        output_dir = "artifacts"
+        # Use topic-specific directory with consistent topic_id generation
+        topic_id = self._generate_topic_id(topic)
+        output_dir = f"artifacts/{topic_id}"
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, "article.md")
         
@@ -276,7 +308,13 @@ class VisualAssetAgent(BaseAgent):
         else:
             raise ValueError("LLM_PROVIDER must be 'GOOGLE', 'OPENAI', or 'SARVAM'")
 
-    def execute(self, video_script: str):
+    def _generate_topic_id(self, topic: str) -> str:
+        """Generate consistent topic_id from topic string."""
+        topic_id = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
+        topic_id = re.sub(r'[\s-]+', '-', topic_id).strip('-')
+        return topic_id
+
+    def execute(self, video_script: str, topic: str):
         print("Suggesting visual assets...")
         template = """You are an expert art director. Your task is to read the provided video script and suggest appropriate visual assets (e.g., diagrams, photos, stock footage) for each section.
 
@@ -293,7 +331,9 @@ class VisualAssetAgent(BaseAgent):
         visual_assets_content = visual_assets_response.content
         token_usage = visual_assets_response.response_metadata.get("token_usage", {})
 
-        output_dir = "artifacts"
+        # Use topic-specific directory with consistent topic_id generation
+        topic_id = self._generate_topic_id(topic)
+        output_dir = f"artifacts/{topic_id}"
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, "shotlist.json")
         
@@ -316,8 +356,19 @@ class OrchestratorAgent(BaseAgent):
         self.article_writer_agent = ArticleWriterAgent()
         self.visual_asset_agent = VisualAssetAgent()
 
+    def _generate_topic_id(self, topic: str) -> str:
+        """Generate consistent topic_id from topic string."""
+        import re
+        # Convert to lowercase, replace spaces and special chars with hyphens
+        topic_id = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
+        topic_id = re.sub(r'[\s-]+', '-', topic_id).strip('-')
+        return topic_id
+
     def execute(self, topic: str, simulate_llm_calls: bool = False):
         print(f"Orchestrating content creation for topic: {topic}")
+        
+        topic_id = self._generate_topic_id(topic)
+        output_dir = f"artifacts/{topic_id}"
         
         # Step 1: Research
         research_content = self.research_agent.execute(topic)
@@ -328,14 +379,13 @@ class OrchestratorAgent(BaseAgent):
             with open("simulated_artifacts/narrative.md", "r") as f:
                 narrative_content = f.read()
             narrative_token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0} # Simulated token usage
-            # Write simulated narrative to artifacts directory for test verification
-            output_dir = "artifacts"
+            # Write simulated narrative to topic-specific directory for test verification
             os.makedirs(output_dir, exist_ok=True)
             narrative_output_path = os.path.join(output_dir, "narrative.md")
             with open(narrative_output_path, "w") as f:
                 f.write(narrative_content)
         else:
-            analysis_result = self.analysis_agent.execute(research_content)
+            analysis_result = self.analysis_agent.execute(research_content, topic)
             narrative_content = analysis_result["content"]
             narrative_token_usage = analysis_result["token_usage"]
 
@@ -345,8 +395,7 @@ class OrchestratorAgent(BaseAgent):
             with open("simulated_artifacts/script.md", "r") as f:
                 video_script_content = f.read()
             video_script_token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0} # Simulated token usage
-            # Write simulated script to artifacts directory for test verification
-            output_dir = "artifacts"
+            # Write simulated script to topic-specific directory for test verification
             os.makedirs(output_dir, exist_ok=True)
             script_output_path = os.path.join(output_dir, "script.md")
             with open(script_output_path, "w") as f:
@@ -356,18 +405,17 @@ class OrchestratorAgent(BaseAgent):
             with open("simulated_artifacts/article.md", "r") as f:
                 web_article_content = f.read()
             web_article_token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0} # Simulated token usage
-            # Write simulated article to artifacts directory for test verification
-            output_dir = "artifacts"
+            # Write simulated article to topic-specific directory for test verification
             os.makedirs(output_dir, exist_ok=True)
             article_output_path = os.path.join(output_dir, "article.md")
             with open(article_output_path, "w") as f:
                 f.write(web_article_content)
         else:
-            script_result = self.scriptwriting_agent.execute(narrative_content)
+            script_result = self.scriptwriting_agent.execute(narrative_content, topic)
             video_script_content = script_result["content"]
             video_script_token_usage = script_result["token_usage"]
 
-            article_result = self.article_writer_agent.execute(narrative_content)
+            article_result = self.article_writer_agent.execute(narrative_content, topic)
             web_article_content = article_result["content"]
             web_article_token_usage = article_result["token_usage"]
 
@@ -377,14 +425,13 @@ class OrchestratorAgent(BaseAgent):
             with open("simulated_artifacts/shotlist.json", "r") as f:
                 visual_assets_content = f.read()
             visual_assets_token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0} # Simulated token usage
-            # Write simulated shotlist to artifacts directory for test verification
-            output_dir = "artifacts"
+            # Write simulated shotlist to topic-specific directory for test verification
             os.makedirs(output_dir, exist_ok=True)
             shotlist_output_path = os.path.join(output_dir, "shotlist.json")
             with open(shotlist_output_path, "w") as f:
                 f.write(visual_assets_content)
         else:
-            visual_assets_result = self.visual_asset_agent.execute(video_script_content)
+            visual_assets_result = self.visual_asset_agent.execute(video_script_content, topic)
             visual_assets_content = visual_assets_result["content"]
             visual_assets_token_usage = visual_assets_result["token_usage"]
         
