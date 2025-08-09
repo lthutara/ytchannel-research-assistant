@@ -1,5 +1,11 @@
-.venv
+venv
 .env
 artifacts/
-src/__pycache__/
 simulated_artifacts/
+src/__pycache__/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.log
